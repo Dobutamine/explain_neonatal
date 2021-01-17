@@ -7,7 +7,7 @@ callback = () => {
     // set the datalogger interval
     neo.setDataloggerInterval(0.015);
     // set the models to watch
-    neo.setModelsToWatch(['LA','LV','RA','RV','AA','VC'])
+    neo.setDataloggerWatchedModels(['LA','LV','RA','RV','AA','VC'])
     // calculate 10 second of the model
     neo.calculateModel(10)
     // reset the callback
