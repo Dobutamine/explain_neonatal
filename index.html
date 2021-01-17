@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EXPLAIN!</title>
+    <script
+      type="text/javascript"
+      src="https://www.gstatic.com/charts/loader.js"
+    ></script>
+    <script src="https://unpkg.com/simple-statistics@7.1.0/dist/simple-statistics.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css"
+    />
+
+    <style>
+      .box {
+        display: block;
+        height: 250px;
+        width: 100%;
+      }
+      .box2 {
+        display: block;
+        height: 250px;
+      }
+      .box3 {
+        display: block;
+        float: left;
+        height: 250px;
+        width: 50%;
+      }
+      .box4 {
+        display: block;
+        float: right;
+        height: 250px;
+        width: 50%;
+      }
+      .box5 {
+        display: block;
+        float: left;
+        height: 450px;
+        width: 50%;
+      }
+      .box6 {
+        display: block;
+        float: right;
+        height: 450px;
+        width: 50%;
+      }
+    </style>
+    
+
+
+  </head>
+<body>
+    <div class="ui padded segment" style="text-align: center;">
+        <h2>EXPLAIN!</h2>
+        Open the developer console to interact with the model engine with
+        Command+Option+i (Mac) or Control+Shift+i (Windows).
+        <br />
+
+    </div>
+    <!-- Create div to render the chart into-->
+    <div class="box" id="nonrt_chart1" ></div>
+    <div class="box" id="nonrt_chart2" ></div>
+    
+    <div class="box2">
+      <div class="box5" id="xy_chart1" ></div>
+      <div class="box6" id="xy_chart2" ></div>
+
+    </div>
+    <div class="box" id="rt_chart" ></div>
+   
+
+    <script type="text/javascript" src="lcjs.iife.js"></script>
+    <script type="text/javascript" src="index.js"></script>
+    <script type="text/javascript" src="model.js"></script>
+    <script type="text/javascript" src="plotter.js"></script>
+    <script type="text/javascript" src="./Scripts/neonatal.js"></script>
+
+</body>
+</html>
