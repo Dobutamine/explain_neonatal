@@ -88,7 +88,7 @@ function save(data = neo.data, filename = "datadump") {
 
 function showPressure(model) {
     neo.setDataloggerInterval(0.0005)
-    neo.setModelsToWatch(model)
+    neo.setDataloggerWatchedModels(model)
     callback = () => {
         plotTimeChart(1, neo, [model],['pres'],[1],["pressure in mmmhg"]);
         resetCallback()
@@ -98,7 +98,7 @@ function showPressure(model) {
 
 function calcPres(model, chart = 1, duration = 30, logger_interval = 0.0005, min = null, max = null) {
     neo.setDataloggerInterval(logger_interval)
-    neo.setModelsToWatch([model])
+    neo.setDataloggerWatchedModels([model])
     callback = () => {
         let max_pres = -1000
         let min_pres = 1000
@@ -127,7 +127,7 @@ function calcPres(model, chart = 1, duration = 30, logger_interval = 0.0005, min
 
 function calcFlow(model, chart = 1, duration = 30, logger_interval = 0.0005, min = null, max = null) {
     neo.setDataloggerInterval(logger_interval)
-    neo.setModelsToWatch([model, "ecg"])
+    neo.setDataloggerWatchedModels([model, "ecg"])
     callback = () => {
         let total_flow = 0
         let stroke_volume_cum = 0
@@ -157,7 +157,7 @@ function calcFlow(model, chart = 1, duration = 30, logger_interval = 0.0005, min
 }
 
 function getBloodGas(model = 'AA', chart = 1, duration = 0.1, logger_interval = 0.015) {
-    neo.setModelsToWatch([model])
+    neo.setDataloggerWatchedModels([model])
     neo.setDataloggerInterval(logger_interval)
 
     callback = () => {
