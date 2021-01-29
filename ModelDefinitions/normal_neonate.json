@@ -14,12 +14,7 @@
     "resp_q": 0.8,
     "p_atm": 760.0,
     "outside_temp": 20.0,
-    "body_temp": 36.9,
-    "hemoglobin": 10.0,
-    "dpg": 5.0,
-    "albumin": 30.0,
-    "phosphates": 1.5,
-    "sid": 31.6
+    "body_temp": 36.9
   },
   "ecg": {
     "name": "ecg",
@@ -29,23 +24,31 @@
     "is_enabled": true,
     "heart_rate": 120.0,
     "heart_rate_ref": 120.0,
+    "venticular_escape_rate": 40,
     "rhythm_type": 0,
     "pq_time": 0.1,
     "av_delay": 0.02,
     "qrs_time": 0.075,
     "qt_time": 0.4,
     "cqt_time": 0.26,
-    "amp_p": 8.0,
+    "amp_p": 1.0,
     "skew_p": 2.5,
     "width_p": 20.0,
-    "amp_t": 18.0,
-    "skew_t": 1.5,
+    "amp_q":  -0.5,
+    "width_q": 20.0,
+    "skew_q": 2,
+    "amp_r":  10,
+    "width_r": 20.0,
+    "skew_r": 2.5,
+    "amp_s":  -1.5,
+    "width_s": 20.0,
+    "skew_s": 10,
+    "amp_t": 2.0,
+    "skew_t": 2.0,
     "width_t": 25.0,
     "ncc_atrial": 0,
     "ncc_ventricular": 0,
-    "ecg_signal": 0.0,
-    "normal_qrs_wave": [-8, 3, 96, -104, 4, 9, 0, 0],
-    "vent_qrs_wave": [-25, 20, 50, -150, 20, 20, 20, 15, 10, 10, 10]
+    "ecg_signal": 0.0
   },
   "heart": {
     "name": "heart",
@@ -57,11 +60,10 @@
   },
   "lungs": {
     "name": "lungs",
-    "description": "heart contraction",
+    "description": "lung model",
     "type": "model",
     "subtype": "",
-    "is_enabled": true,
-    "activation_delay": 0.000
+    "is_enabled": true
   },
   "breathing": {
     "name": "breathing",
@@ -91,13 +93,14 @@
     "max_pip": 30,
     "pip": 14,
     "peep": 2.9,
+    "hfo_bias_flow": 15.0,
     "insp_flow": 8.0,
     "exp_flow": 2.0,
     "t_in": 0.4,
-    "t_ex": 1.5,
+    "t_ex": 0.6,
     "t_ex_backup": 2.6,
     "cycling_mode": "time",
-    "ventilator_mode": "pressure",
+    "ventilator_mode": "hfov",
     "volume_garanteed": false,
     "synchronized": false
   },
@@ -182,6 +185,39 @@
     "subtype": "",
     "is_enabled": false
   },
+  "blood": {
+    "name": "blood",
+    "description": "",
+    "type": "model",
+    "subtype": "",
+    "is_enabled": true,
+    "compounds": {
+      "to2": 4,
+      "tco2": 25.18,
+      "sodium": 138,
+      "chloride": 100,
+      "hemoglobin": 10.0,
+      "albumin": 30.0,
+      "phosphates": 1.5,
+      "sid": 41.6,
+      "uma": 10
+    }
+  },
+  "gas": {
+    "name": "gas",
+    "description": "",
+    "type": "model",
+    "subtype": "",
+    "is_enabled": true,
+    "gas_constant": 62.36367,
+    "temp_room": 20,
+    "dry_air": {
+      "fo2": 0.2095,
+      "fargon": 0.0092,
+      "fco2": 0.0004,
+      "fn2": 0.7809
+    }
+  },
   "uterus": {
     "name": "uterus",
     "description": "",
@@ -229,7 +265,33 @@
     "description": "",
     "type": "model",
     "subtype": "",
-    "is_enabled": false
+    "is_enabled": true,
+    "heartrate_source": ["ecg", "measured_heartrate"],
+    "resprate_source": ["breathing", "spont_resp_rate"],
+    "etco2_source": ["ventilator","etco2_ventilator"],
+    "temp_source": ["metabolism","body_temp"],
+    "ecg_signal_source": ["ecg", "ecg_signal"],
+    "abp_signal_source": ["AD", "pres"],
+    "pap_signal_source": ["PA", "pres"],
+    "cvp_signal_source": ["RA", "pres"],
+    "etco2_signal_source": ["YPIECE","pco2"],
+    "resp_signal_source": ["breathing", "resp_muscle_pressure"],
+    "sao2_pre_source": ["AA","so2"],
+    "sao2_post_source": ["AD","so2"],
+    "svo2_source": ["IVC","so2"],
+    "arterial_bloodgas_source": "AA",
+    "alveolar_gas_source": ["ALL", "ALR"],
+    "liver_flow_source": ["AD_LIVER", "real_flow"],
+    "kidney_flow_source": ["AD_KIDNEYS", "real_flow"],
+    "brain_flow_source": ["AA_BRAIN", "real_flow"],
+    "myocardium_flow_source": ["AA_MYO", "real_flow"],
+    "vsd_flow_source": ["VSD", "real_flow"],
+    "ofo_flow_source": ["OFO", "real_flow"],
+    "pda_flow_source": ["PDA", "real_flow"],
+    "ivc_flow_source": ["IVC_RA", "real_flow"],
+    "svc_flow_source": ["SVC_RA", "real_flow"],
+    "lvo_source": ["LV_AA", "real_flow"],
+    "rvo_source": ["RV_PA", "real_flow"]
   },
   "blood_compartment_definitions": [
     {
@@ -289,7 +351,7 @@
       "vol": 0.00775,
       "vol_u": 0.0,
       "el_min": 542.0,
-      "el_max": 25000.0,
+      "el_max": 50000.0,
       "el_k1": 0.0,
       "el_k2": 0.0,
       "fvatp": 0.0,
@@ -1042,7 +1104,7 @@
       "description": "patent ductus arteriosus",
       "type": "component",
       "subtype": "blood_connector",
-      "is_enabled": false,
+      "is_enabled": true,
       "no_flow": false,
       "no_backflow": false,
       "comp_from": "AD",
@@ -1220,12 +1282,8 @@
       "el_max": 0.0,
       "el_k1": 0.0,
       "el_k2": 0.0,
-      "fo2": 0.20696,
-      "fn2": 0.7809,
-      "fco2": 0.0004,
-      "fother": 0.0092,
-      "fh2o": 0.025,
-      "temp": 20.0
+      "fh2o": 0.01,
+      "temp_source": "room"
     },
     {
       "name": "NCA",
@@ -1240,12 +1298,8 @@
       "el_max": 0.0,
       "el_k1": 0.0,
       "el_k2": 0.0,
-      "fo2": 0.20696,
-      "fn2": 0.7809,
-      "fco2": 0.0004,
-      "fother": 0.0092,
-      "fh2o": 0.025,
-      "temp": 37.0
+      "fh2o": 0.063,
+      "temp_source": "body"
     },
     {
       "name": "ALL",
@@ -1260,12 +1314,8 @@
       "el_max": 0.0,
       "el_k1": 0.0,
       "el_k2": 0.0,
-      "fo2": 0.20696,
-      "fn2": 0.7809,
-      "fco2": 0.0004,
-      "fother": 0.0092,
-      "fh2o": 0.025,
-      "temp": 37.0
+      "fh2o": 0.063,
+      "temp_source": "body"
     },
     {
       "name": "ALR",
@@ -1280,12 +1330,8 @@
       "el_max": 0.0,
       "el_k1": 0.0,
       "el_k2": 0.0,
-      "fo2": 0.20696,
-      "fn2": 0.7809,
-      "fco2": 0.0004,
-      "fother": 0.0092,
-      "fh2o": 0.025,
-      "temp": 37.0
+      "fh2o": 0.063,
+      "temp_source": "body"
     },
     {
       "name": "VENTIN",
@@ -1300,12 +1346,8 @@
       "el_max": 0.0,
       "el_k1": 0.0,
       "el_k2": 0.0,
-      "fo2": 0.20696,
-      "fn2": 0.7809,
-      "fco2": 0.0004,
-      "fother": 0.0092,
       "fh2o": 0.025,
-      "temp": 20.0
+      "temp_source": "room"
     },
     {
       "name": "VENTOUT",
@@ -1320,12 +1362,8 @@
       "el_max": 0.0,
       "el_k1": 0.0,
       "el_k2": 0.0,
-      "fo2": 0.20696,
-      "fn2": 0.7809,
-      "fco2": 0.0004,
-      "fother": 0.0092,
       "fh2o": 0.025,
-      "temp": 20.0
+      "temp_source": "room"
     },
     {
       "name": "TUBINGIN",
@@ -1340,12 +1378,8 @@
       "el_max": 0.0,
       "el_k1": 0.0,
       "el_k2": 0.0,
-      "fo2": 0.20696,
-      "fn2": 0.7809,
-      "fco2": 0.0004,
-      "fother": 0.0092,
       "fh2o": 0.025,
-      "temp": 20.0
+      "temp_source": "room"
     },
     {
       "name": "YPIECE",
@@ -1360,12 +1394,8 @@
       "el_max": 0.0,
       "el_k1": 0.0,
       "el_k2": 0.0,
-      "fo2": 0.20696,
-      "fn2": 0.7809,
-      "fco2": 0.0004,
-      "fother": 0.0092,
       "fh2o": 0.025,
-      "temp": 20.0
+      "temp_source": "room"
     },
     {
       "name": "TUBINGOUT",
@@ -1380,12 +1410,8 @@
       "el_max": 0.0,
       "el_k1": 0.0,
       "el_k2": 0.0,
-      "fo2": 0.20696,
-      "fn2": 0.7809,
-      "fco2": 0.0004,
-      "fother": 0.0092,
       "fh2o": 0.025,
-      "temp": 20.0
+      "temp_source": "room"
     }
   ],
   "gas_connector_definitions": [
@@ -1454,8 +1480,8 @@
       "description": "ventilator tubing insp to exp",
       "type": "component",
       "subtype": "gas_connector",
-      "is_enabled": true,
-      "no_flow": false,
+      "is_enabled": false,
+      "no_flow": true,
       "no_backflow": false,
       "comp_from": "TUBINGIN",
       "comp_to": "TUBINGOUT",
