@@ -62,28 +62,6 @@ class Model {
 
   }
 
-  setDataloggerMonitorObject = (monitorObject) => {
-    this.engine.postMessage({
-      type: "set",
-      target: "datalogger",
-      action: "setMonitorObject",
-      data: monitorObject,
-      return_tag: null
-    });
-
-  }
-
-  getDataloggerMonitorObject = () => {
-    this.engine.postMessage({
-      type: "get",
-      target: "datalogger",
-      action: "setMonitorObject",
-      data: monitorObject,
-      return_tag: "monitorObject"
-    });
-    
-  }
-
   setDataloggerInterval = (update_interval) => {    
     this.engine.postMessage({
       type: "set",
@@ -104,6 +82,16 @@ class Model {
     });
   }
 
+  setDataloggerWatchedModelsRT = (models_to_watch) => {
+    this.engine.postMessage({
+      type: "set",
+      target: "datalogger",
+      action: "setWatchedModelsRT",
+      data: models_to_watch,
+      return_tag: null
+    });
+  }
+
   setModelState = (snapshot) => {
     this.engine.postMessage({
       type: "set",
@@ -112,6 +100,24 @@ class Model {
       data: snapshot,
       return_tag: null
     });
+  }
+
+  setPropertyDirect = (model, property, new_value) => {
+    this.engine.postMessage({
+      type: "set_direct",
+      target: model,
+      action: property,
+      data: new_value
+    })
+  }
+
+  setPropertyByFunction = (model, func, new_value) => {
+    this.engine.postMessage({
+      type: "set",
+      target: model,
+      action: func,
+      data: new_value
+    })
   }
 
   setProperty = (model, property, new_value, in_time = 0, at_time = 0, mode = "abs") => {
@@ -131,7 +137,15 @@ class Model {
       return_tag: null
     });
   }
-
+  getModelJSON = () => {
+    this.engine.postMessage({
+      type:"get",
+      target:"datalogger",
+      action:"getModelJSON",
+      data: null,
+      return_tag: "json"
+    })
+  }
   getModelState = () => {
     // if model is not specified this gets all the properties of the model engine
     this.engine.postMessage({
@@ -142,11 +156,11 @@ class Model {
       return_tag: "state"
     });
   }
-  getModelDefinition = (model) => {
+  getModelDefinition = () => {
     this.engine.postMessage({
       type: "get",
       target: "model_definition",
-      action: null,
+      action: "null",
       data: null,
       return_tag: "model_definition"
     });
@@ -218,9 +232,10 @@ class Model {
 
   clearData = () => {
     // clear the data object
-    console.log(`%cMODEL: reset all model output data`, "color:red;")
+    // console.log(`%cMODEL: reset all model output data`, "color:red;")
     this.data = []
   }
+
 
   _receiveMessageFromModel = (message) => {
     switch (message.type) {
@@ -253,7 +268,7 @@ class Model {
         break;
       // message type not recognized
       default:
-        console.log(message)
+        // console.log(message)
         break;
     }
     
